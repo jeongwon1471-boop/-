@@ -1,0 +1,11 @@
+{
+  "name": "복지정책팀 밀밀 식권대장",
+  "short_name": "밀밀 식권대장",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "lang": "ko",
+  "icons": []
+}
