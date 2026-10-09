@@ -19,4 +19,11 @@ function fill(id,data){$(id).replaceChildren();for(const values of data){const t
 async function report(){try{rows=await api('/api/admin/report?month='+$('month').value);const people=new Map(),rest=new Map();for(const r of rows){people.set(r.person,(people.get(r.person)||0)+r.count);rest.set(r.restaurant,(rest.get(r.restaurant)||0)+r.count)}fill('byPerson',[...people].map(([a,b])=>[a,b]));fill('byRestaurant',[...rest].map(([a,b])=>[a,b]));fill('details',rows.map(r=>[r.person,r.restaurant,r.day,r.count]));$('grandTotal').textContent='총 '+rows.reduce((s,r)=>s+r.count,0)+'장'}catch(e){notice(e.message)}}
 function cell(v){const s=String(v??'');return '"'+(/^[=+@\-\t\r]/.test(s)?"'"+s:s).replace(/"/g,'""')+'"'}function csv(){const lines=[['직원','식당','날짜','장수'],...rows.map(r=>[r.person,r.restaurant,r.day,r.count])];const data='\ufeff'+lines.map(r=>r.map(cell).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([data],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='식권집계_'+$('month').value+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 loadStaff();if(token)loadAdmin();
+</script><script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .catch(error => console.error('앱 등록 오류:', error));
+  });
+}
 </script></body></html>
