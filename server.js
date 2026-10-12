@@ -303,7 +303,32 @@ app.get('/api/admin/report', admin, async (req, res) => {
   })));
 });
 
-app.listen(
+// 관리자 전용: 기록 보관 후 초기화
+app.post('/api/admin/archive-reset', admin, async (req, res) => {
+  const { data, error } = await supabase.rpc(
+    'archive_and_reset_tickets'
+  );
+
+  if (error) return fail(res, error);
+
+  res.json({
+    ok: true,
+    saved: data
+  });
+});
+
+// 관리자 전용: 지난 기록 보관함 조회
+app.get('/api/admin/archives', admin, async (req, res) => {
+  const { data, error } = await supabase
+    .from('restaurant_usage_archive')
+    .select('batch_id,archived_at,person_name,restaurant_name,day,count')
+    .order('archived_at', { ascending: false })
+    .order('day', { ascending: false });
+
+  if (error) return fail(res, error);
+
+  res.json(data);
+});app.listen(
   process.env.PORT || 3000,
   '0.0.0.0',
   () => console.log('식권 서버 실행 중 - Supabase 연결')
