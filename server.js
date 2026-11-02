@@ -99,7 +99,7 @@ app.get('/api/usage', async (req, res) => {
     .select('restaurant_id,count')
     .eq('person_id', id)
     .gte('day', month + '-01')
-    .lte('day', month + '-31');
+    .lt('day', nextMonth(month))
 
   if (error) return fail(res, error);
 
@@ -289,7 +289,7 @@ app.get('/api/admin/report', admin, async (req, res) => {
       restaurants(name)
     `)
     .gte('day', month + '-01')
-    .lte('day', month + '-31')
+    .lt('day', nextMonth(month))
     .gt('count', 0)
     .order('day');
 
