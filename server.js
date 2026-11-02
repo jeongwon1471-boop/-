@@ -36,6 +36,11 @@ const validId = n =>
 
 const validMonth = s =>
   /^\d{4}-(0[1-9]|1[0-2])$/.test(s);
+function nextMonth(month) {
+  const [year, m] = month.split('-').map(Number);
+  const next = new Date(Date.UTC(year, m, 1));
+  return next.toISOString().slice(0, 7) + '-01';
+}
 
 function fail(res, e) {
   console.error(e);
